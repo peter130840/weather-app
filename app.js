@@ -1,11 +1,7 @@
-console.log('starting');
+require('dotenv').config();
+const request = require('request');
+const url = `https://api.darksky.net/forecast/${process.env.SECRETKEY}/37.8267,-122.4233`;
 
-setTimeout(()=>{
-    console.log('2 Second Timer');    
-}, 2000);
-
-setTimeout(()=>{
-    console.log('0 Second Timer')
-}, 0)
-
-console.log('stopping');
+request({ url: url, json: true}, (error, response) => {
+    console.log(response.body.currently);
+})

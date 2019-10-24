@@ -45,11 +45,32 @@ app.get('/help', (req, res) => {
 
 
 app.get('/weather', (req, res) => {
+    if(!req.query.address){
+        return res.send('PLZ give me your address!')
+    }
     res.send({
-        location: 'Taipei',
+        location: req.query.address,
         forecast: 'earthquake coming!'
     });
 })
+
+
+
+app.get('/products', (req, res) => {
+    if(!req.query.search) {
+        return res.send({
+            error: 'You must provide a search tern.'
+        })
+    }
+    console.log(req.query.search);
+
+    res.send({
+        products: []
+    })
+})  
+
+
+
 
 app.get('/help/*', (req, res) => {
     res.render('404', {
@@ -67,6 +88,7 @@ app.get('*', (req, res) => {
    })
 });
 
+
 app.listen(3000, () => {
     console.log('started! on port 3000');
-});
+})

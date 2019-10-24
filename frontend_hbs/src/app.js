@@ -1,9 +1,8 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
-
-//console.log(__dirname);
-//console.log(path.join(__dirname, '../public'));
+const geocode = require('./utils/geocode');
+const forecast = require('./utils/forecast');
 
 const app = express();
 
@@ -43,14 +42,20 @@ app.get('/help', (req, res) => {
     })
 })
 
-
-app.get('/weather', (req, res) => {
+app.get('/weather' , (req, res) => {
     if(!req.query.address){
-        return res.send('PLZ give me your address!')
+         return res.send({error :'PLZ give me your address!'})
     }
-    res.send({
-        location: req.query.address,
-        forecast: 'earthquake coming!'
+    geocode(req.query.address, (error, {longtitute, latitute, location} = {}) => {
+        if(error) {
+            return res.send(error);
+        }
+        forecast(longtitute, latitute, (error, forecastData) => {
+            if(error) {
+                return res.send(error);
+            }
+            return res.send({location,forecastData});
+          })
     });
 })
 

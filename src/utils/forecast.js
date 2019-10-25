@@ -6,6 +6,7 @@ const forecast = (latitute, longtitute, callback) => {
     request({ url: urlDarksky, json: true }, (error, response) => {
         const {error: resError} = response.body;
         const {temperature, precipProbability} = response.body.currently;
+        const summary = response.body.daily.data[0].summary;
         if (error) {
             callback('Unable to connect to weather service!', undefined)
         } else if (resError) {
@@ -13,7 +14,7 @@ const forecast = (latitute, longtitute, callback) => {
         }
         else {
             callback(undefined, 'It is curently ' + temperature +
-                ' degrees out. there is a ' + precipProbability + '% chance of rain.')
+                ' degrees out. there is a ' + precipProbability + '% chance of rain.\n' + summary)
         }
 
     });
